@@ -8,12 +8,13 @@ namespace AnimatedGame
 {
     class Ball
     {
-        static int x, y, speed;
+        public int x, y, size, speed;
 
-        public Ball(int _x, int _y, int _speed)
+        public Ball(int _x, int _y, int _size, int _speed)
         {
             x = _x;
             y = _y;
+            size = _size;
             speed = _speed;
         }
 

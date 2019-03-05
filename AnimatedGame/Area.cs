@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AnimatedGame
 {
-    class Box
+    class Area
     {
-        static int x, y, width, height;
+        public int x, y, width, height;
 
-        public Box(int _x, int _y, int _width, int _height)
+        public Area(int _x, int _y, int _width, int _height)
         {
             x = _x;
             y = _y;
