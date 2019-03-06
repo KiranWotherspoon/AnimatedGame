@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace AnimatedGame
 {
@@ -111,10 +112,17 @@ namespace AnimatedGame
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            if (rightArrowDown) { player.x += playerSpeed; }
-            if (leftArrowDown) { player.x -= playerSpeed; }
-            if (upArrowDown) { player.y -= playerSpeed; }
-            if (downArrowDown) { player.y += playerSpeed; }
+            int tempX = player.x, tempY = player.y;
+
+            if (rightArrowDown) { player.Move("right"); }
+            if (leftArrowDown) { player.Move("left"); }
+            if (upArrowDown) { player.Move("up"); }
+            if (downArrowDown) { player.Move("down"); }
+
+            foreach (Ball b in obstacles)
+            {
+                if (player.Collision(b)) { GameOver(); }
+            }
 
             foreach (Ball b in obstacles)
             {
@@ -122,6 +130,19 @@ namespace AnimatedGame
                 if (b.y <= rowHeight * 2) { b.speed = -b.speed; }
                 else if (b.y >= rowHeight * 8 + rowWidth / 2) { b.speed = -b.speed; }
             }
+
+            foreach (Area a in outAreas)
+            {
+                if (a.Collision(player))
+                {
+                    /*if (player.y > a.y)
+                    {
+                        player.y = tempY;
+                    }*/
+                }
+            }
+
+            if (gameAreas[4].Collision(player) && gameAreas[3].Collision(player) == false) { GameOver(); }
 
             Refresh();
         }
@@ -146,6 +167,16 @@ namespace AnimatedGame
 
             drawBrush.Color = Color.MediumPurple;
             e.Graphics.FillRectangle(drawBrush, player.x, player.y, player.size, player.size);
+        }
+
+        private void GameOver()
+        {
+
+            gameTimer.Enabled = false;
+            player.x = rowWidth * 3;
+            player.y = rowHeight * 5;
+            Thread.Sleep(500);
+            gameTimer.Enabled = true;
         }
     }
 }
