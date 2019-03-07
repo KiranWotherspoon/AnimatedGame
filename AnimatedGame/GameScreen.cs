@@ -33,8 +33,8 @@ namespace AnimatedGame
             rowWidth = this.Width / 20;
             rowHeight = this.Height / 13;
             CreateRectangles();
-            
 
+            this.Focus();
         }
 
         private void CreateRectangles ()
@@ -88,6 +88,12 @@ namespace AnimatedGame
                 case Keys.Down:
                     downArrowDown = true;
                     break;
+                case Keys.Escape:
+                    gameTimer.Enabled = false;
+                    PauseScreen pp = new PauseScreen();
+                    this.Controls.Add(pp);
+                    pp.Location = new Point((this.Width - pp.Width) / 2, (this.Height - pp.Height) / 2);
+                    break;
             }
         }
 
@@ -127,18 +133,18 @@ namespace AnimatedGame
             foreach (Ball b in obstacles)
             {
                 b.Move();
-                if (b.y <= rowHeight * 2) { b.speed = -b.speed; }
-                else if (b.y >= rowHeight * 8 + rowWidth / 2) { b.speed = -b.speed; }
+                if (b.Collision(outAreas[5]) || b.Collision(outAreas[6]))
+                {
+                    b.speed = -b.speed;
+                }
             }
 
             foreach (Area a in outAreas)
             {
                 if (a.Collision(player))
                 {
-                    /*if (player.y > a.y)
-                    {
-                        player.y = tempY;
-                    }*/
+                    player.y = tempY;
+                    player.x = tempX;
                 }
             }
 
@@ -165,7 +171,7 @@ namespace AnimatedGame
                 e.Graphics.FillEllipse(drawBrush, b.x, b.y, b.size, b.size);
             }
 
-            drawBrush.Color = Color.MediumPurple;
+            drawBrush.Color = Color.Crimson;
             e.Graphics.FillRectangle(drawBrush, player.x, player.y, player.size, player.size);
         }
 

@@ -16,8 +16,8 @@ namespace AnimatedGame
         {
             InitializeComponent();
 
-            GameScreen gs = new GameScreen();
-            this.Controls.Add(gs);
+            MainMenu mm = new MainMenu();
+            this.Controls.Add(mm);
         }
     }
 }

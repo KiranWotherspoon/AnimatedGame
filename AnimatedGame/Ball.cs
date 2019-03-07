@@ -24,6 +24,15 @@ namespace AnimatedGame
             y += speed;
         }
 
+        public bool Collision (Area a)
+        {
+            Rectangle rec1 = new Rectangle(x, y, size, size);
+            Rectangle rec2 = new Rectangle(a.x, a.y, a.width, a.height);
+
+            if (rec1.IntersectsWith(rec2)) { return true; }
+            return false;
+        }
+
         public bool Collision (Ball b)
         {
             Rectangle rec1 = new Rectangle(x, y, size, size);
