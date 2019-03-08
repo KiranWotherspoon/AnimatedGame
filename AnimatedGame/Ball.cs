@@ -19,11 +19,6 @@ namespace AnimatedGame
             speed = _speed;
         }
 
-        public void Move ()
-        {
-            y += speed;
-        }
-
         public bool Collision (Area a)
         {
             Rectangle rec1 = new Rectangle(x, y, size, size);

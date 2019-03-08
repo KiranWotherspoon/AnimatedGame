@@ -60,17 +60,23 @@
     <Compile Include="GameScreen.Designer.cs">
       <DependentUpon>GameScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameScreen2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameScreen2.Designer.cs">
+      <DependentUpon>GameScreen2.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MainMenu.Designer.cs">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="PauseScreen.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="PauseForm.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PauseScreen.Designer.cs">
-      <DependentUpon>PauseScreen.cs</DependentUpon>
+    <Compile Include="PauseForm.Designer.cs">
+      <DependentUpon>PauseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,11 +86,14 @@
     <EmbeddedResource Include="GameScreen.resx">
       <DependentUpon>GameScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GameScreen2.resx">
+      <DependentUpon>GameScreen2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PauseScreen.resx">
-      <DependentUpon>PauseScreen.cs</DependentUpon>
+    <EmbeddedResource Include="PauseForm.resx">
+      <DependentUpon>PauseForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -74,6 +74,25 @@ namespace AnimatedGame
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape && gameTimer.Enabled)
+            {
+                gameTimer.Enabled = false;
+
+                rightArrowDown = leftArrowDown = upArrowDown = downArrowDown = false;
+
+                DialogResult result = PauseForm.Show();
+
+                if (result == DialogResult.Cancel)
+                {
+                    gameTimer.Enabled = true;
+                }
+                else if (result == DialogResult.Abort)
+                {
+                    //Form1.ChangeScreen(this, "MenuScreen");
+                }
+
+            }
+
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -87,12 +106,6 @@ namespace AnimatedGame
                     break;
                 case Keys.Down:
                     downArrowDown = true;
-                    break;
-                case Keys.Escape:
-                    gameTimer.Enabled = false;
-                    PauseScreen pp = new PauseScreen();
-                    this.Controls.Add(pp);
-                    pp.Location = new Point((this.Width - pp.Width) / 2, (this.Height - pp.Height) / 2);
                     break;
             }
         }
@@ -132,7 +145,7 @@ namespace AnimatedGame
 
             foreach (Ball b in obstacles)
             {
-                b.Move();
+                b.Move("down");
                 if (b.Collision(outAreas[5]) || b.Collision(outAreas[6]))
                 {
                     b.speed = -b.speed;
