@@ -42,9 +42,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.DoubleBuffered = true;
             this.Name = "GameScreen2";
             this.Size = new System.Drawing.Size(800, 560);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameScreen2_Paint);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameScreen2_KeyUp);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameScreen2_PreviewKeyDown);
             this.ResumeLayout(false);
 
         }

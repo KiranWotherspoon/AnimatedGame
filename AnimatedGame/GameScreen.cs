@@ -140,7 +140,7 @@ namespace AnimatedGame
 
             foreach (Ball b in obstacles)
             {
-                if (player.Collision(b)) { GameOver(); }
+                if (player.Collision(b)) { /*GameOver();*/ }
             }
 
             foreach (Ball b in obstacles)
@@ -161,7 +161,7 @@ namespace AnimatedGame
                 }
             }
 
-            if (gameAreas[4].Collision(player) && gameAreas[3].Collision(player) == false) { GameOver(); }
+            if (gameAreas[4].Collision(player) && gameAreas[3].Collision(player) == false) { NextLevel(); }
 
             Refresh();
         }
@@ -197,5 +197,16 @@ namespace AnimatedGame
             Thread.Sleep(500);
             gameTimer.Enabled = true;
         }
+
+        private void NextLevel()
+        {
+            Form f = this.FindForm();
+            f.Controls.Remove(this);
+
+            GameScreen2 gs2 = new GameScreen2();
+            f.Controls.Add(gs2);
+            gs2.Focus();
+        }
+        
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace AnimatedGame
 {
@@ -18,6 +19,10 @@ namespace AnimatedGame
         List<Area> outAreas = new List<Area>();
         List<Area> gameAreas = new List<Area>();
         List<Ball> obstacles = new List<Ball>();
+
+        Ball player;
+
+        bool rightArrowDown, leftArrowDown, upArrowDown, downArrowDown;
 
         public GameScreen2()
         {
@@ -50,13 +55,47 @@ namespace AnimatedGame
             Ball b1 = new Ball(rowWidth * 6, rowHeight * 3, rowHeight / 2, ballSpeed); obstacles.Add(b1);
             Ball b2 = new Ball(rowWidth * 6, rowHeight * 5, rowHeight / 2, ballSpeed); obstacles.Add(b2);
             Ball b3 = new Ball(rowWidth * 6, rowHeight * 7, rowHeight / 2, ballSpeed); obstacles.Add(b3);
-            Ball b4 = new Ball(rowWidth * 13 + rowHeight / 2, rowHeight * 4, rowHeight / 2, ballSpeed); obstacles.Add(b4);
-            Ball b5 = new Ball(rowWidth * 13 + rowHeight / 2, rowHeight * 6 , rowHeight / 2, ballSpeed); obstacles.Add(b5);
+            Ball b4 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 4, rowHeight / 2, ballSpeed); obstacles.Add(b4);
+            Ball b5 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 6 , rowHeight / 2, ballSpeed); obstacles.Add(b5);
+
+            player = new Ball(rowWidth * 3, rowHeight * 5, rowWidth / 2, 3);
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            int tempX = player.x, tempY = player.y;
 
+            if (rightArrowDown) { player.Move("right"); }
+            if (leftArrowDown) { player.Move("left"); }
+            if (upArrowDown) { player.Move("up"); }
+            if (downArrowDown) { player.Move("down"); }
+
+            foreach (Ball b in obstacles)
+            {
+                if (player.Collision(b)) { GameOver(); }
+            }
+
+            foreach (Ball b in obstacles)
+            {
+                b.Move("right");
+                if (b.Collision(outAreas[3]) || b.Collision(outAreas[7]))
+                {
+                    b.speed = -b.speed;
+                }
+            }
+
+            foreach (Area a in outAreas)
+            {
+                if (a.Collision(player))
+                {
+                    player.y = tempY;
+                    player.x = tempX;
+                }
+            }
+
+            if (player.Collision(gameAreas[4]) && player.Collision(gameAreas[3]) == false) { NextLevel(); }
+
+            Refresh();
         }
 
         private void GameScreen2_Paint(object sender, PaintEventArgs e)
@@ -76,6 +115,86 @@ namespace AnimatedGame
                 drawBrush.Color = Color.Blue;
                 e.Graphics.FillEllipse(drawBrush, b.x, b.y, b.size, b.size);
             }
+
+            drawBrush.Color = Color.Crimson;
+            e.Graphics.FillRectangle(drawBrush, player.x, player.y, player.size, player.size);
+        }
+
+        private void GameScreen2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape && gameTimer.Enabled)
+            {
+                gameTimer.Enabled = false;
+
+                rightArrowDown = leftArrowDown = upArrowDown = downArrowDown = false;
+
+                DialogResult result = PauseForm.Show();
+
+                if (result == DialogResult.Cancel)
+                {
+                    gameTimer.Enabled = true;
+                }
+                else if (result == DialogResult.Abort)
+                {
+                    //Form1.ChangeScreen(this, "MenuScreen");
+                }
+
+            }
+
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    leftArrowDown = true;
+                    break;
+                case Keys.Right:
+                    rightArrowDown = true;
+                    break;
+                case Keys.Up:
+                    upArrowDown = true;
+                    break;
+                case Keys.Down:
+                    downArrowDown = true;
+                    break;
+            }
+        }
+
+        private void GameScreen2_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    leftArrowDown = false;
+                    break;
+                case Keys.Right:
+                    rightArrowDown = false;
+                    break;
+                case Keys.Up:
+                    upArrowDown = false;
+                    break;
+                case Keys.Down:
+                    downArrowDown = false;
+                    break;
+            }
+        }
+
+        private void GameOver()
+        {
+
+            gameTimer.Enabled = false;
+            player.x = rowWidth * 3;
+            player.y = rowHeight * 5;
+            Thread.Sleep(500);
+            gameTimer.Enabled = true;
+        }
+
+        private void NextLevel()
+        {
+            Form f = this.FindForm();
+            f.Controls.Remove(this);
+
+            MainMenu mm = new MainMenu();
+            f.Controls.Add(mm);
+            mm.Focus();
         }
     }
 }

@@ -22,8 +22,9 @@ namespace AnimatedGame
             Form f = this.FindForm();
             f.Controls.Remove(this);
 
-            GameScreen2 gs = new GameScreen2();
+            GameScreen gs = new GameScreen();
             f.Controls.Add(gs);
+            gs.Focus();
         }
     }
 }
