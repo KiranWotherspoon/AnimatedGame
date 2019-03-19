@@ -19,5 +19,15 @@ namespace AnimatedGame
             MainMenu mm = new MainMenu();
             this.Controls.Add(mm);
         }
+
+        static public void ChangeScreen (UserControl uc)
+        {
+            Form f = uc.FindForm();
+            f.Controls.Remove(uc);
+            uc.Dispose();
+
+            MainMenu mm = new MainMenu();
+            f.Controls.Add(mm);
+        }
     }
 }

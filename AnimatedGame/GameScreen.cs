@@ -88,7 +88,7 @@ namespace AnimatedGame
                 }
                 else if (result == DialogResult.Abort)
                 {
-                    //Form1.ChangeScreen(this, "MenuScreen");
+                    Form1.ChangeScreen(this);
                 }
 
             }
@@ -140,7 +140,7 @@ namespace AnimatedGame
 
             foreach (Ball b in obstacles)
             {
-                if (player.Collision(b)) { /*GameOver();*/ }
+                if (player.Collision(b)) { GameOver(); }
             }
 
             foreach (Ball b in obstacles)
@@ -200,8 +200,10 @@ namespace AnimatedGame
 
         private void NextLevel()
         {
+            gameTimer.Enabled = false;
             Form f = this.FindForm();
             f.Controls.Remove(this);
+            this.Dispose();
 
             GameScreen2 gs2 = new GameScreen2();
             f.Controls.Add(gs2);

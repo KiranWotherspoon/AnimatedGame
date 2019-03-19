@@ -55,8 +55,8 @@ namespace AnimatedGame
             Ball b1 = new Ball(rowWidth * 6, rowHeight * 3, rowHeight / 2, ballSpeed); obstacles.Add(b1);
             Ball b2 = new Ball(rowWidth * 6, rowHeight * 5, rowHeight / 2, ballSpeed); obstacles.Add(b2);
             Ball b3 = new Ball(rowWidth * 6, rowHeight * 7, rowHeight / 2, ballSpeed); obstacles.Add(b3);
-            Ball b4 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 4, rowHeight / 2, ballSpeed); obstacles.Add(b4);
-            Ball b5 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 6 , rowHeight / 2, ballSpeed); obstacles.Add(b5);
+            Ball b4 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 4, rowHeight / 2, -ballSpeed); obstacles.Add(b4);
+            Ball b5 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 6 , rowHeight / 2, -ballSpeed); obstacles.Add(b5);
 
             player = new Ball(rowWidth * 3, rowHeight * 5, rowWidth / 2, 3);
         }
@@ -136,7 +136,7 @@ namespace AnimatedGame
                 }
                 else if (result == DialogResult.Abort)
                 {
-                    //Form1.ChangeScreen(this, "MenuScreen");
+                    Form1.ChangeScreen(this);
                 }
 
             }
@@ -189,8 +189,10 @@ namespace AnimatedGame
 
         private void NextLevel()
         {
+            gameTimer.Enabled = false;
             Form f = this.FindForm();
             f.Controls.Remove(this);
+            this.Dispose();
 
             MainMenu mm = new MainMenu();
             f.Controls.Add(mm);

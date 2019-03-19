@@ -26,5 +26,10 @@ namespace AnimatedGame
             f.Controls.Add(gs);
             gs.Focus();
         }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.FindForm().Close();
+        }
     }
 }
