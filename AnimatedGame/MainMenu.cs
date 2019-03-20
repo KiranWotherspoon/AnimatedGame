@@ -19,6 +19,7 @@ namespace AnimatedGame
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //put the player in the first level
             Form f = this.FindForm();
             f.Controls.Remove(this);
 
@@ -29,6 +30,7 @@ namespace AnimatedGame
 
         private void exitButton_Click(object sender, EventArgs e)
         {
+            //close the program
             this.FindForm().Close();
         }
     }

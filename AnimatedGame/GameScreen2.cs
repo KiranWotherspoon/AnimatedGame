@@ -13,6 +13,7 @@ namespace AnimatedGame
 {
     public partial class GameScreen2 : UserControl
     {
+        #region Globals
         int rowHeight, rowWidth, ballSpeed = 5;
         SolidBrush drawBrush = new SolidBrush(Color.Thistle);
 
@@ -23,6 +24,7 @@ namespace AnimatedGame
         Ball player;
 
         bool rightArrowDown, leftArrowDown, upArrowDown, downArrowDown;
+        #endregion
 
         public GameScreen2()
         {
@@ -35,6 +37,7 @@ namespace AnimatedGame
 
         private void CreateRectangles ()
         {
+            //create all out of bounds and game areas, balls, and the player 
             Area a1 = new Area(0, 0, rowWidth * 2, this.Height); outAreas.Add(a1);
             Area a2 = new Area(rowWidth * 2, 0, rowWidth * 3, rowHeight * 2); outAreas.Add(a2);
             Area a3 = new Area(rowWidth * 2, rowHeight * 9, rowWidth * 5, rowHeight * 2); outAreas.Add(a3);
@@ -63,18 +66,22 @@ namespace AnimatedGame
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            //create a temorary location at the players location
             int tempX = player.x, tempY = player.y;
-
+            
+            //move the player in the direction(s) they are moving
             if (rightArrowDown) { player.Move("right"); }
             if (leftArrowDown) { player.Move("left"); }
             if (upArrowDown) { player.Move("up"); }
             if (downArrowDown) { player.Move("down"); }
 
+            //check to see if the player is colliding with any balls
             foreach (Ball b in obstacles)
             {
                 if (player.Collision(b)) { GameOver(); }
             }
 
+            //move each ball, and if they are colliding with an out of bounds area reverse their direction
             foreach (Ball b in obstacles)
             {
                 b.Move("right");
@@ -84,6 +91,7 @@ namespace AnimatedGame
                 }
             }
 
+            //check if the player is colliding with an out of bounds area, if they are retun them to their temporary position
             foreach (Area a in outAreas)
             {
                 if (a.Collision(player))
@@ -93,13 +101,16 @@ namespace AnimatedGame
                 }
             }
 
+            //check to see if the player has beaten the level, if they have move them to the next level
             if (player.Collision(gameAreas[4]) && player.Collision(gameAreas[3]) == false) { NextLevel(); }
 
+            //call paint method
             Refresh();
         }
 
         private void GameScreen2_Paint(object sender, PaintEventArgs e)
         {
+            //draw everything
             foreach (Area a in outAreas)
             {
                 drawBrush.Color = Color.Thistle;
@@ -122,6 +133,7 @@ namespace AnimatedGame
 
         private void GameScreen2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            //pause function
             if (e.KeyCode == Keys.Escape && gameTimer.Enabled)
             {
                 gameTimer.Enabled = false;
@@ -141,6 +153,7 @@ namespace AnimatedGame
 
             }
 
+            //change the players direction
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -179,7 +192,7 @@ namespace AnimatedGame
 
         private void GameOver()
         {
-
+            //reset the player to the starting position
             gameTimer.Enabled = false;
             player.x = rowWidth * 3;
             player.y = rowHeight * 5;
@@ -189,6 +202,7 @@ namespace AnimatedGame
 
         private void NextLevel()
         {
+            //move the player to the next level
             gameTimer.Enabled = false;
             Form f = this.FindForm();
             f.Controls.Remove(this);

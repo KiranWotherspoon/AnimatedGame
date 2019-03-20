@@ -13,6 +13,7 @@ namespace AnimatedGame
 {
     public partial class GameScreen : UserControl
     {
+        #region Globals
         int rowWidth, rowHeight, playerSpeed = 3, ballSpeed = 5;
 
         List<Area> outAreas = new List<Area>();
@@ -25,20 +26,21 @@ namespace AnimatedGame
 
 
         bool rightArrowDown, leftArrowDown, upArrowDown, downArrowDown;
+        #endregion
 
         public GameScreen()
         {
             InitializeComponent();
 
+            //create all the stuff on the screen
             rowWidth = this.Width / 20;
             rowHeight = this.Height / 13;
             CreateRectangles();
-
-            this.Focus();
         }
 
         private void CreateRectangles ()
         {
+            //create all out areas, game areas, balls, and the player
             Area rec1 = new Area(0, 0, rowWidth * 2, this.Height); outAreas.Add(rec1); 
             Area rec2 = new Area(rowWidth * 2, 0, rowWidth * 2, rowHeight * 4); outAreas.Add(rec2);
             Area rec3 = new Area(rowWidth * 2, rowHeight * 7, rowWidth * 2, rowHeight * 4); outAreas.Add(rec3);
@@ -74,6 +76,7 @@ namespace AnimatedGame
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            //pause screen function
             if (e.KeyCode == Keys.Escape && gameTimer.Enabled)
             {
                 gameTimer.Enabled = false;
@@ -93,6 +96,7 @@ namespace AnimatedGame
 
             }
 
+            //change the direction of the player
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -131,18 +135,22 @@ namespace AnimatedGame
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            //create a temporary location where the player currently is
             int tempX = player.x, tempY = player.y;
 
+            //move the player in the direction(s) they are supposed to be moving
             if (rightArrowDown) { player.Move("right"); }
             if (leftArrowDown) { player.Move("left"); }
             if (upArrowDown) { player.Move("up"); }
             if (downArrowDown) { player.Move("down"); }
 
+            //check to see if the player is colliding with any of the balls and if they are play game over method
             foreach (Ball b in obstacles)
             {
                 if (player.Collision(b)) { GameOver(); }
             }
 
+            //move all the balls and if they are hitting a wall reverse their direction
             foreach (Ball b in obstacles)
             {
                 b.Move("down");
@@ -152,6 +160,7 @@ namespace AnimatedGame
                 }
             }
 
+            //check to see if the player is running into the out areas, if they are reset them to the temporary location
             foreach (Area a in outAreas)
             {
                 if (a.Collision(player))
@@ -161,13 +170,16 @@ namespace AnimatedGame
                 }
             }
 
+            //if the player has completed the level move them to the next level
             if (gameAreas[4].Collision(player) && gameAreas[3].Collision(player) == false) { NextLevel(); }
 
+            //call the paint method
             Refresh();
         }
 
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
+            //draw the out of bounds, the start and end zones, the balls, and the player
             foreach (Area r in outAreas)
             {
                 drawBrush.Color = Color.Thistle;
@@ -190,7 +202,7 @@ namespace AnimatedGame
 
         private void GameOver()
         {
-
+            //disable the timer, return the player to the starting position, re-enable timer
             gameTimer.Enabled = false;
             player.x = rowWidth * 3;
             player.y = rowHeight * 5;
@@ -200,11 +212,12 @@ namespace AnimatedGame
 
         private void NextLevel()
         {
+            //move the player to the next level
             gameTimer.Enabled = false;
             Form f = this.FindForm();
             f.Controls.Remove(this);
             this.Dispose();
-
+            
             GameScreen2 gs2 = new GameScreen2();
             f.Controls.Add(gs2);
             gs2.Focus();
