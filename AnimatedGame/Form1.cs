@@ -12,6 +12,8 @@ namespace AnimatedGame
 {
     public partial class Form1 : Form
     {
+        static public int lives = 5;
+
         public Form1()
         {
             InitializeComponent();

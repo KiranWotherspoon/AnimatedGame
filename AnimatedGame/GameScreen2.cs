@@ -55,11 +55,11 @@ namespace AnimatedGame
             Area a14 = new Area(rowWidth * 13, rowHeight * 2, rowWidth * 2, rowHeight * 1); gameAreas.Add(a14);
             Area a15 = new Area(rowWidth * 15, rowHeight * 2, rowWidth * 3, rowHeight * 7); gameAreas.Add(a15);
 
-            Ball b1 = new Ball(rowWidth * 6, rowHeight * 3, rowHeight / 2, ballSpeed); obstacles.Add(b1);
-            Ball b2 = new Ball(rowWidth * 6, rowHeight * 5, rowHeight / 2, ballSpeed); obstacles.Add(b2);
-            Ball b3 = new Ball(rowWidth * 6, rowHeight * 7, rowHeight / 2, ballSpeed); obstacles.Add(b3);
-            Ball b4 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 4, rowHeight / 2, -ballSpeed); obstacles.Add(b4);
-            Ball b5 = new Ball(rowWidth * 13 - rowHeight / 2, rowHeight * 6 , rowHeight / 2, -ballSpeed); obstacles.Add(b5);
+            Ball b1 = new Ball(rowWidth * 6, rowHeight * 3, rowWidth / 2, ballSpeed); obstacles.Add(b1);
+            Ball b2 = new Ball(rowWidth * 6, rowHeight * 5, rowWidth / 2, ballSpeed); obstacles.Add(b2);
+            Ball b3 = new Ball(rowWidth * 6, rowHeight * 7, rowWidth / 2, ballSpeed); obstacles.Add(b3);
+            Ball b4 = new Ball(rowWidth * 14 - rowWidth / 2, rowHeight * 4, rowWidth / 2, -ballSpeed); obstacles.Add(b4);
+            Ball b5 = new Ball(rowWidth * 14 - rowWidth / 2, rowHeight * 6 , rowWidth / 2, -ballSpeed); obstacles.Add(b5);
 
             player = new Ball(rowWidth * 3, rowHeight * 5, rowWidth / 2, 3);
         }
@@ -104,6 +104,9 @@ namespace AnimatedGame
             //check to see if the player has beaten the level, if they have move them to the next level
             if (player.Collision(gameAreas[4]) && player.Collision(gameAreas[3]) == false) { NextLevel(); }
 
+            //check to see if the player has run out of lives
+            if (Form1.lives <= 0) { RealGameOver(); }
+
             //call paint method
             Refresh();
         }
@@ -129,6 +132,12 @@ namespace AnimatedGame
 
             drawBrush.Color = Color.Crimson;
             e.Graphics.FillRectangle(drawBrush, player.x, player.y, player.size, player.size);
+
+            drawBrush.Color = Color.Red;
+            for (int i = 0; i < Form1.lives; i++)
+            {
+                e.Graphics.FillEllipse(drawBrush, rowWidth / 4 + (i * rowHeight / 2), rowHeight / 4, rowWidth / 2, rowHeight / 2);
+            }
         }
 
         private void GameScreen2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -196,6 +205,7 @@ namespace AnimatedGame
             gameTimer.Enabled = false;
             player.x = rowWidth * 3;
             player.y = rowHeight * 5;
+            Form1.lives--;
             Thread.Sleep(500);
             gameTimer.Enabled = true;
         }
@@ -211,6 +221,20 @@ namespace AnimatedGame
             MainMenu mm = new MainMenu();
             f.Controls.Add(mm);
             mm.Focus();
+        }
+
+        private void RealGameOver()
+        {
+            Form1.lives = 5;
+
+            gameTimer.Enabled = false;
+            Form f = this.FindForm();
+            f.Controls.Remove(this);
+            this.Dispose();
+
+            MainMenu mm = new MainMenu();
+            f.Controls.Add(mm);
+
         }
     }
 }
