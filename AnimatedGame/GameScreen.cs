@@ -235,6 +235,7 @@ namespace AnimatedGame
 
         private void RealGameOver ()
         {
+            //reset lives and go to main menu
             Form1.lives = 5;
 
             gameTimer.Enabled = false;
